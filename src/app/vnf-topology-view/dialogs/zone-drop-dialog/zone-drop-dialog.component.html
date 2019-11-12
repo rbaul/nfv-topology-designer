@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Create new Zone '{{data.name}}'</h2>
+
+<form [formGroup]="form">
+  <mat-dialog-content>
+
+    <div>
+      <mat-form-field>
+        <input matInput placeholder="Name" formControlName="name" required>
+      </mat-form-field>
+    </div>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button class="mat-raised-button mat-primary" (click)="create()" cdkFocusInitial
+      [disabled]="!form.valid">Create</button>
+    <button class="mat-raised-button" mat-dialog-close>Close</button>
+  </mat-dialog-actions>
+</form>

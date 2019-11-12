@@ -8,8 +8,12 @@ import {
   MatToolbarModule,
   MatIconModule,
   MatSliderModule,
-  MatButtonModule
+  MatButtonModule,
+  MatTooltipModule,
+  MatDialogModule,
+  MatInputModule
 } from '@angular/material';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -22,7 +26,11 @@ import {
     MatToolbarModule,
     MatIconModule,
     MatSliderModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTooltipModule,
+    MatDialogModule,
+    MatInputModule,
+    FormsModule
   ],
   imports: [
     CommonModule,
@@ -33,7 +41,11 @@ import {
     MatToolbarModule,
     MatIconModule,
     MatSliderModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTooltipModule,
+    MatDialogModule,
+    MatInputModule,
+    FormsModule
   ]
 })
 export class AngularMaterialModule { }

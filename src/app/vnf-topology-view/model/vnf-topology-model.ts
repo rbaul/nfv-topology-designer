@@ -1,5 +1,7 @@
 export enum DataType {
-    ZONE, HOST, VM
+    ZONE = 'ZONE',
+    HOST = 'HOST',
+    VM = 'VM'
 }
 
 

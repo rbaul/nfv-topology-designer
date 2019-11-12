@@ -68,51 +68,59 @@
 
       <mat-expansion-panel expanded>
         <mat-expansion-panel-header>
-          VNFs
+          Zones
         </mat-expansion-panel-header>
 
-        <div cdkDropList cdkDropListConnectedTo="graphContainer" class="example-list">
-          <div class="example-box" *ngFor="let vm of vms" cdkDrag [cdkDragData]="vm"
+        <div cdkDropList cdkDropListOrientation="horizontal" cdkDropListConnectedTo="graphContainer"
+          class="example-list">
+          <div class="example-box" matTooltip="{{zone.name}}" *ngFor="let zone of zones" cdkDrag [cdkDragData]="zone"
             (cdkDragStarted)="dragStart($event)" (cdkDragMoved)="moved($event)" (cdkDragEnded)="dragEnded($event)">
-            <img mat-card-sm-image src="{{vm.img}}" class="vm">
+            <img mat-card-sm-image src="{{zone.img}}" class="zone">
             <img>
             <div *cdkDragPlaceholder class="field-placeholder"></div>
           </div>
+          <button mat-icon-button class="zone-new" matTooltip="Create New" (click) = "addNew('ZONE')">
+            <mat-icon>add</mat-icon>
+          </button>
         </div>
 
       </mat-expansion-panel>
 
-      <mat-expansion-panel>
+      <mat-expansion-panel expanded>
         <mat-expansion-panel-header>
           Hosts
         </mat-expansion-panel-header>
 
         <div cdkDropList cdkDropListOrientation="horizontal" cdkDropListConnectedTo="graphContainer"
           class="example-list">
-          <div class="example-box" *ngFor="let host of hosts" cdkDrag [cdkDragData]="host"
+          <div class="example-box" matTooltip="{{host.name}}" *ngFor="let host of hosts" cdkDrag [cdkDragData]="host"
             (cdkDragStarted)="dragStart($event)" (cdkDragMoved)="moved($event)" (cdkDragEnded)="dragEnded($event)">
             <img mat-card-sm-image src="{{host.img}}" class="host">
             <img>
             <div *cdkDragPlaceholder class="field-placeholder"></div>
           </div>
+          <button mat-icon-button class="host-new" matTooltip="Create New" (click) = "addNew('HOST')">
+            <mat-icon>add</mat-icon>
+          </button>
         </div>
 
       </mat-expansion-panel>
 
-
-      <mat-expansion-panel>
+      <mat-expansion-panel expanded>
         <mat-expansion-panel-header>
-          Zones
+          VNFs
         </mat-expansion-panel-header>
 
-        <div cdkDropList cdkDropListOrientation="horizontal" cdkDropListConnectedTo="graphContainer"
-          class="example-list">
-          <div class="example-box" *ngFor="let zone of zones" cdkDrag [cdkDragData]="zone"
+        <div cdkDropList cdkDropListConnectedTo="graphContainer" class="example-list">
+          <div matTooltip="{{vm.name}}" class="example-box" *ngFor="let vm of vms" cdkDrag [cdkDragData]="vm"
             (cdkDragStarted)="dragStart($event)" (cdkDragMoved)="moved($event)" (cdkDragEnded)="dragEnded($event)">
-            <img mat-card-sm-image src="{{zone.img}}" class="zone">
+            <img mat-card-sm-image src="{{vm.img}}" class="vm">
             <img>
             <div *cdkDragPlaceholder class="field-placeholder"></div>
           </div>
+          <button mat-icon-button class="vnf-new" matTooltip="Create New" (click) = "addNew('VM')">
+            <mat-icon>add</mat-icon>
+          </button>
         </div>
 
       </mat-expansion-panel>

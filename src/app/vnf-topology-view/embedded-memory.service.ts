@@ -46,4 +46,15 @@ export class EmbeddedMemoryService {
   ];
 
   constructor() { }
+
+  addType(type: TypeData) {
+    switch (type.type) {
+      case DataType.ZONE: this.zones.push(type);
+        break;
+      case DataType.HOST: this.hosts.push(type);
+        break;
+      case DataType.VM: this.vms.push(type);
+        break;
+    }
+  }
 }

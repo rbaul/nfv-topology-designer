@@ -1,12 +1,12 @@
 .example-list {
     // width: 1000px;
     max-width: 100%;
-    border: solid 1px #ccc;
+    // border: solid 1px #ccc;
     // min-height: 60px;
     display: flex;
     flex-direction: row;
     // background: white;
-    border-radius: 4px;
+    // border-radius: 4px;
     overflow: hidden;
     flex-wrap: wrap;
 }
@@ -31,6 +31,19 @@
     border-color: #E6E6E6;
 }
 
+.host-new,
+.zone-new {
+    height: 48px;
+    width: 48px;
+    margin: 5px;
+    border-radius: 5px;
+    border: solid 4px;
+    border-color: #E6E6E6;
+    background-color: white;
+    color: blue;
+    box-shadow: none;
+}
+
 #graphContainer {
     overflow: hidden;
     width: 100%;
@@ -38,6 +51,16 @@
     // padding: 10px;
 }
 
+.vnf-new {
+    height: 69px;
+    width: 69px;
+    margin: 5px;
+    background-color: white;
+    color: blue;
+    border: solid 4px;
+    border-color: #E6E6E6;
+    box-shadow: none;
+}
 
 .host,
 .vm,

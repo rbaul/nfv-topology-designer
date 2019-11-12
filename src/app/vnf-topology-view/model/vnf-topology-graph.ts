@@ -1,6 +1,7 @@
 import { mxgraph, mxgraphFactory } from 'mxgraph-factory';
 import { VnfTopologyVertexHandler } from './vnf-topology-vertex-handler';
 import { DataType, TypeData } from './vnf-topology-model';
+import { VnfTopologyEdgeHandler } from './vnf-topology-edge-handler';
 
 const { mxClient, mxGraph, mxGraphModel, mxConstants, mxPerimeter, mxUtils, mxEvent, mxVertexHandler, mxStylesheet, renderingHint,
     mxPoint, mxImage, mxPanningHandler, mxEdgeStyle,
@@ -150,6 +151,14 @@ export class VnfTopologyGraph extends mxGraph {
         return false;
     }
 
+    createEdgeHandler(state: any, edgeStyle: any): mxgraph.mxEdgeHandler {
+        if (state != null &&
+            this.model.isEdge(state.cell)) {
+            return new VnfTopologyEdgeHandler(state);
+        }
+        return super.createEdgeHandler(state, edgeStyle);
+    }
+
     createVertexHandler(state: any): mxgraph.mxVertexHandler {
         if (state != null &&
             this.model.isVertex(state.cell)) {
@@ -276,6 +285,7 @@ export class VnfTopologyGraph extends mxGraph {
             port.geometry.relative = true;
             port.setConnectable(true);
         }
+        this.refresh();
         return host;
     }
 
@@ -291,6 +301,7 @@ export class VnfTopologyGraph extends mxGraph {
 
         const zone = this.insertVertex(null, null, node, x - width / 2, y - height / 2, width, height, 'zone');
         zone.setConnectable(false);
+        this.refresh();
         return zone;
     }
 
@@ -331,6 +342,7 @@ export class VnfTopologyGraph extends mxGraph {
             this.addCirclePort(vm, x, y, radius_port, offset);
         }
         vm.setConnectable(false);
+        this.refresh();
         return vm;
     }
 
