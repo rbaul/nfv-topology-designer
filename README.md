@@ -1,11 +1,12 @@
 # NFV Topology Designer
 
 > NFV (Network Function Virtualization) Topology Designer
+
 > [Demo application](https://rbaul.github.io/nfv-topology-designer/)
 
 ## Demo
 
-![](demo/demo.png)
+![](demo/demo.PNG)
 
 ## Build on
 
