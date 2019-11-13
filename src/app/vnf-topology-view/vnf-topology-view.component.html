@@ -79,7 +79,7 @@
             <img>
             <div *cdkDragPlaceholder class="field-placeholder"></div>
           </div>
-          <button mat-icon-button class="zone-new" matTooltip="Create New" (click) = "addNew('ZONE')">
+          <button mat-icon-button class="zone-new" matTooltip="Create New" (click)="addNew('ZONE')">
             <mat-icon>add</mat-icon>
           </button>
         </div>
@@ -99,7 +99,7 @@
             <img>
             <div *cdkDragPlaceholder class="field-placeholder"></div>
           </div>
-          <button mat-icon-button class="host-new" matTooltip="Create New" (click) = "addNew('HOST')">
+          <button mat-icon-button class="host-new" matTooltip="Create New" (click)="addNew('HOST')">
             <mat-icon>add</mat-icon>
           </button>
         </div>
@@ -118,7 +118,7 @@
             <img>
             <div *cdkDragPlaceholder class="field-placeholder"></div>
           </div>
-          <button mat-icon-button class="vnf-new" matTooltip="Create New" (click) = "addNew('VM')">
+          <button mat-icon-button class="vnf-new" matTooltip="Create New" (click)="addNew('VM')">
             <mat-icon>add</mat-icon>
           </button>
         </div>
@@ -141,7 +141,18 @@
     <div id="outlineContainer"
       style="z-index:1;position:absolute;overflow:hidden;top:0px;right:0px;width:160px;height:120px;background:transparent;border-style:solid;border-color:lightgray;">
     </div>
-    <mat-slider color="primary" vertical min="5" max="200" step="10" value="100" (change)="zoomChange($event)"
-      style="position: absolute;bottom: 0;"></mat-slider>
+    <div style="position: absolute;bottom: 0;">
+      <!-- <div>
+        <button mat-icon-button (click)="zoomReset()">
+          <mat-icon>favorite</mat-icon>
+        </button>
+      </div> -->
+
+      <div>
+        <mat-slider color="primary" vertical min="5" max="200" step="10" value="100" (change)="zoomChange($event)">
+        </mat-slider>
+      </div>
+    </div>
+
   </mat-sidenav-content>
 </mat-sidenav-container>

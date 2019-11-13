@@ -6,7 +6,7 @@ import { VnfTopologyViewComponent } from './vnf-topology-view.component';
 import { AddNewDialogComponent } from './dialogs/add-new-dialog/add-new-dialog.component';
 import { ZoneDropDialogComponent } from './dialogs/zone-drop-dialog/zone-drop-dialog.component';
 import { HostVnfDropDialogComponent } from './dialogs/host-vnf-drop-dialog/host-vnf-drop-dialog.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 
 
@@ -24,7 +24,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    FormsModule
   ],
   entryComponents: [
     AddNewDialogComponent,

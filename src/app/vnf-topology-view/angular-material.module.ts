@@ -11,7 +11,9 @@ import {
   MatButtonModule,
   MatTooltipModule,
   MatDialogModule,
-  MatInputModule
+  MatInputModule,
+  MatSnackBarModule,
+  MAT_SNACK_BAR_DEFAULT_OPTIONS
 } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 
@@ -30,7 +32,7 @@ import { FormsModule } from '@angular/forms';
     MatTooltipModule,
     MatDialogModule,
     MatInputModule,
-    FormsModule
+    MatSnackBarModule
   ],
   imports: [
     CommonModule,
@@ -45,7 +47,15 @@ import { FormsModule } from '@angular/forms';
     MatTooltipModule,
     MatDialogModule,
     MatInputModule,
-    FormsModule
+    MatSnackBarModule
+  ],
+  providers: [
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {
+      duration: 2500,
+      verticalPosition: 'top',
+      // horizontalPosition: 'end',
+      // panelClass: ['success-snackbar']
+    }}
   ]
 })
 export class AngularMaterialModule { }

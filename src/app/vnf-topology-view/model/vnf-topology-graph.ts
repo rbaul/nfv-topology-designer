@@ -232,7 +232,7 @@ export class VnfTopologyGraph extends mxGraph {
         // hostStyle[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_SWIMLANE;
         // hostStyle[mxConstants.STYLE_ROUNDED] = '1';
         // hostStyle[mxConstants.STYLE_STARTSIZE] = '20';
-        hostStyle[mxConstants.STYLE_FILLCOLOR] = '#E6E6E6';
+        hostStyle[mxConstants.STYLE_FILLCOLOR] = '#E6FCFF';
         hostStyle[mxConstants.STYLE_VERTICAL_LABEL_POSITION] = 'top';
         hostStyle[mxConstants.STYLE_ALIGN] = 'center';
         hostStyle[mxConstants.STYLE_LABEL_POSITION] = 'center';

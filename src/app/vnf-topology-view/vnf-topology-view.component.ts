@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { MatList, MatSliderChange, MatDialog } from '@angular/material';
+import { MatList, MatSliderChange, MatDialog, MatSnackBar } from '@angular/material';
 import { mxgraph, mxgraphFactory } from 'mxgraph-factory';
 import { VnfTopologyGraph } from './model/vnf-topology-graph';
 import { CdkDragMove, CdkDragDrop, CdkDragEnd, CdkDragStart } from '@angular/cdk/drag-drop';
@@ -31,13 +31,17 @@ export class VnfTopologyViewComponent implements OnInit, AfterViewInit {
   dropX: number;
   dropY: number;
 
+  graphX;
+  graphY;
+
   hosts: TypeData[];
   zones: TypeData[];
   vms: TypeData[];
 
   constructor(
     private embeddedMemoryService: EmbeddedMemoryService,
-    public dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -52,7 +56,7 @@ export class VnfTopologyViewComponent implements OnInit, AfterViewInit {
 
     // Overwrite alert message
     mxUtils.alert = (message: string) => {
-      console.error(message);
+      this.snackBar.open(message);
     };
 
 
@@ -91,6 +95,13 @@ export class VnfTopologyViewComponent implements OnInit, AfterViewInit {
 
     this.dropX = event.pointerPosition.x;
     this.dropY = event.pointerPosition.y;
+
+    const mouseEvent: MouseEvent = event.event as MouseEvent;
+    let location: mxgraph.mxPoint = this.graph.getPointForEvent(mouseEvent, false);
+    this.graphX = location.x;
+    this.graphY = location.y;
+    
+
     // this.position = `> Position X: ${event.pointerPosition.x} - Y: ${event.pointerPosition.y}`;
   }
 
@@ -119,12 +130,20 @@ export class VnfTopologyViewComponent implements OnInit, AfterViewInit {
       // const y = this.drop_y - event.container.element.nativeElement.offsetTop;
 
       const parent: any = event.container.element.nativeElement.offsetParent;
-      const x = this.dropX - parent.offsetLeft;
-      const y = this.dropY - parent.offsetParent.offsetTop;
+      // const x = this.dropX - parent.offsetLeft;
+      // const y = this.dropY - parent.offsetParent.offsetTop;
+
+      const viewTranslate = this.graph.view.getTranslate();
+      let x = this.graphX;
+      let y = this.graphY;
+
+      // const { x, y } = mxUtils.convertPoint(this.graph.container, this.dropX, this.dropY);
 
       const data: TypeData = event.item.data;
 
       if (data.type === DataType.HOST) {
+        x += viewTranslate.x;
+        y += viewTranslate.y;
         const parentCell: mxgraph.mxCell = this.graph.getCellAt(x, y);
         if (parentCell && mxUtils.isNode(parentCell.value, 'TypeData')) {
           const typeDrop: DataType = parentCell.value.getAttribute('type') as DataType;
@@ -136,11 +155,15 @@ export class VnfTopologyViewComponent implements OnInit, AfterViewInit {
             // console.log(data.type);
             // this.graph.addHost(parentCell, data, xx, yy, 10);
           } else {
-            console.log('Not valid container, HOST to ZONE need');
+            this.snackBar.open('Not valid container, HOST to ZONE need');
           }
+        } else {
+          this.snackBar.open('Not valid container, HOST to ZONE need');
         }
 
       } else if (data.type === DataType.VM) {
+        x += viewTranslate.x;
+        y += viewTranslate.y;
         const parentCell: mxgraph.mxCell = this.graph.getCellAt(x, y);
         if (parentCell && mxUtils.isNode(parentCell.value, 'TypeData')) {
           const typeDrop: DataType = parentCell.value.getAttribute('type') as DataType;
@@ -153,8 +176,10 @@ export class VnfTopologyViewComponent implements OnInit, AfterViewInit {
             // const img = data.img.startsWith('data') ? this.mxGraphBase64Image(data.img) : data.img;
             // this.graph.addCircleVm(parentCell, data, xx, yy, 40, img, 10);
           } else {
-            console.log('Not valid container, VM to HOST need');
+            this.snackBar.open('Not valid container, VM to HOST need');
           }
+        } else {
+          this.snackBar.open('Not valid container, VM to HOST need');
         }
 
       } else if (data.type === DataType.ZONE) {
@@ -171,6 +196,10 @@ export class VnfTopologyViewComponent implements OnInit, AfterViewInit {
   zoomChange($event: MatSliderChange) {
     console.log($event.value);
     this.graph.zoomTo($event.value / 100, null);
+  }
+
+  zoomReset() {
+    this.graph.zoomActual();
   }
 
   openInNewTab(url: string) {
