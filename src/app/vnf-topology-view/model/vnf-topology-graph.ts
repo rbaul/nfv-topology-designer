@@ -101,17 +101,19 @@ export class VnfTopologyGraph extends mxGraph {
 
             const typeDrag: DataType = cells[0].value.getAttribute('type') as DataType;
 
-            const result = (typeDrop == DataType.HOST && typeDrag == DataType.VM) ||
-                (typeDrop == DataType.ZONE && typeDrag == DataType.HOST);
+            const result = (typeDrop === DataType.HOST && typeDrag === DataType.VM) ||
+                (typeDrop === DataType.ZONE && typeDrag === DataType.HOST);
 
-            console.log(typeDrag + ' -> ' + typeDrop + ' : ' + result);
+            // console.log(typeDrag + ' -> ' + typeDrop + ' : ' + result);
             // TODO: remove edges if moved to another container
             if (result) {
                 console.log(cells[0].getParent().id + ' : ' + cell.id);
-                if (cells[0].getParent().id !== cell.id) {
-                    console.log('Need to delete edges');
+                if (cells[0].getParent().id !== cell.id && typeDrag === DataType.VM) {
+                    const edges: mxgraph.mxCell[] = cells[0].edges;
+                    this.removeCells(edges);
+                    // console.log('Need to delete edges' + edges);
                 } else {
-                    console.log('No Need to delete edges');
+                    // console.log('No Need to delete edges');
                 }
             }
 
