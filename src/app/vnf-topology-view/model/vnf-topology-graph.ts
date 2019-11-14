@@ -2,6 +2,7 @@ import { mxgraph, mxgraphFactory } from 'mxgraph-factory';
 import { VnfTopologyVertexHandler } from './vnf-topology-vertex-handler';
 import { DataType, TypeData } from './vnf-topology-model';
 import { VnfTopologyEdgeHandler } from './vnf-topology-edge-handler';
+import { VnfTopologyConnectionHandler } from './vnf-topology-connection-handler';
 
 const { mxClient, mxGraph, mxGraphModel, mxConstants, mxPerimeter, mxUtils, mxEvent, mxVertexHandler, mxStylesheet, renderingHint,
     mxPoint, mxImage, mxPanningHandler, mxEdgeStyle,
@@ -90,12 +91,20 @@ export class VnfTopologyGraph extends mxGraph {
             true, 'HOST_PORT', null, null, 0, 1, ['HOST_PORT'],
             'Target Must Have 1 Source',
             'Target Must Connect From Source'));
+
+        // this.connectionHandler = new VnfTopologyConnectionHandler(this);
+        // this.connectionHandler.validateConnection = (source: any, target: any) => {
+        //   console.log(source);
+        //   console.log(target);
+        //   // mxUtils.error('Browser is not supported!', 200, false);
+        //   return 'sadsadsa';
+        // };
     }
 
     isValidDropTarget(cell: any, cells: any, evt: any): boolean {
         // const parentCell: mxCell = this.graph.getCellAt(evt.x, evt.y);
-        console.log(cell);
-        console.log(cells);
+        // console.log(cell);
+        // console.log(cells);
         if (mxUtils.isNode(cell.value, 'TypeData') && mxUtils.isNode(cells[0].value, 'TypeData')) {
             const typeDrop: DataType = cell.value.getAttribute('type') as DataType;
 
@@ -107,7 +116,7 @@ export class VnfTopologyGraph extends mxGraph {
             // console.log(typeDrag + ' -> ' + typeDrop + ' : ' + result);
             // TODO: remove edges if moved to another container
             if (result) {
-                console.log(cells[0].getParent().id + ' : ' + cell.id);
+                // console.log(cells[0].getParent().id + ' : ' + cell.id);
                 if (cells[0].getParent().id !== cell.id && typeDrag === DataType.VM) {
                     const edges: mxgraph.mxCell[] = cells[0].edges;
                     this.removeCells(edges);

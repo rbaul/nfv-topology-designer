@@ -134,20 +134,22 @@ export class VnfTopologyViewComponent implements OnInit, AfterViewInit {
       // const y = this.dropY - parent.offsetParent.offsetTop;
 
       const viewTranslate = this.graph.view.getTranslate();
-      let x = this.graphX;
-      let y = this.graphY;
+      const viewZoom = this.graph.view.getScale();
+      // let x = this.graphX;
+      // let y = this.graphY;
 
       // const { x, y } = mxUtils.convertPoint(this.graph.container, this.dropX, this.dropY);
 
       const data: TypeData = event.item.data;
 
       if (data.type === DataType.HOST) {
-        x += viewTranslate.x;
-        y += viewTranslate.y;
+        const {x, y} = mxUtils.convertPoint(this.graph.container, this.dropX, this.dropY);
+        // x = (x + viewTranslate.x) * viewZoom;
+        // y = (y + viewTranslate.y) * viewZoom;
         const parentCell: mxgraph.mxCell = this.graph.getCellAt(x, y);
         if (parentCell && mxUtils.isNode(parentCell.value, 'TypeData')) {
           const typeDrop: DataType = parentCell.value.getAttribute('type') as DataType;
-          if (typeDrop == DataType.ZONE) {
+          if (typeDrop === DataType.ZONE) {
             // x and y relative to parent
             const xx = parentCell ? x - this.graph.getView().getState(parentCell).x : x;
             const yy = parentCell ? y - this.graph.getView().getState(parentCell).y : y;
@@ -162,12 +164,13 @@ export class VnfTopologyViewComponent implements OnInit, AfterViewInit {
         }
 
       } else if (data.type === DataType.VM) {
-        x += viewTranslate.x;
-        y += viewTranslate.y;
+        const {x, y} = mxUtils.convertPoint(this.graph.container, this.dropX, this.dropY);
+        // x = (x + viewTranslate.x) * viewZoom;
+        // y = (y + viewTranslate.y) * viewZoom;
         const parentCell: mxgraph.mxCell = this.graph.getCellAt(x, y);
         if (parentCell && mxUtils.isNode(parentCell.value, 'TypeData')) {
           const typeDrop: DataType = parentCell.value.getAttribute('type') as DataType;
-          if (typeDrop == DataType.HOST) {
+          if (typeDrop === DataType.HOST) {
             // x and y relative to parent
             const xx = parentCell ? x - this.graph.getView().getState(parentCell).x : x;
             const yy = parentCell ? y - this.graph.getView().getState(parentCell).y : y;
@@ -183,7 +186,7 @@ export class VnfTopologyViewComponent implements OnInit, AfterViewInit {
         }
 
       } else if (data.type === DataType.ZONE) {
-        this.dropZone(data, x, y);
+        this.dropZone(data, this.graphX, this.graphY);
         // this.graph.addZone(data, x, y);
       }
     }
@@ -194,7 +197,7 @@ export class VnfTopologyViewComponent implements OnInit, AfterViewInit {
   }
 
   zoomChange($event: MatSliderChange) {
-    console.log($event.value);
+    // console.log($event.value);
     this.graph.zoomTo($event.value / 100, null);
   }
 
@@ -274,5 +277,9 @@ export class VnfTopologyViewComponent implements OnInit, AfterViewInit {
         this.graph.addCircleVm(parentCell, cellData, x, y, 40, img, result.ports);
       }
     });
+  }
+
+  formatLabel(value: number) {
+    return value + '%';
   }
 }
