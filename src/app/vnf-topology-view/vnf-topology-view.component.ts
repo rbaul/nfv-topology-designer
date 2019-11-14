@@ -207,7 +207,7 @@ export class VnfTopologyViewComponent implements OnInit, AfterViewInit {
     win.focus();
   }
 
-  addNew(type: DataType): void {
+  addNew(type: string): void {
     const dialogRef = this.dialog.open(AddNewDialogComponent, {
       width: '250px',
       data: { type }
