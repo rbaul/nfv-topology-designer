@@ -87,7 +87,11 @@ THE SOFTWARE.
 
 @angular/material/button
 
+@angular/material/dialog
+
 @angular/material/expansion
+
+@angular/material/form-field
 
 @angular/material/icon
 
@@ -95,7 +99,11 @@ THE SOFTWARE.
 
 @angular/material/slider
 
+@angular/material/snack-bar
+
 @angular/material/toolbar
+
+@angular/material/tooltip
 
 @angular/platform-browser
 MIT
