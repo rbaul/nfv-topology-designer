@@ -119,7 +119,9 @@ export class VnfTopologyGraph extends mxGraph {
                 // console.log(cells[0].getParent().id + ' : ' + cell.id);
                 if (cells[0].getParent().id !== cell.id && typeDrag === DataType.VM) {
                     const edges: mxgraph.mxCell[] = cells[0].edges;
-                    this.removeCells(edges);
+                    if (edges) {
+                        this.removeCells(edges);
+                    }
                     // console.log('Need to delete edges' + edges);
                 } else {
                     // console.log('No Need to delete edges');
@@ -130,12 +132,6 @@ export class VnfTopologyGraph extends mxGraph {
         } else {
             return false;
         }
-
-        // console.log(cell);
-        // console.log(cells);
-        // console.log(this.model.getParent(cell));
-        return true; // Check if is valid to drop
-        // return this.model.getChildCount(cell) > 3;
     }
 
     convertValueToString(cell: any): string {
