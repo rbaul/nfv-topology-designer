@@ -87,18 +87,123 @@ export class VnfTopologyGraph extends mxGraph {
 
 
         // Target needs exactly one incoming connection from Source (VM_PORT <-> VM_PORT, HOST_PORT)
-        this.multiplicities.push(new mxMultiplicity(
-            true, 'HOST_PORT', null, null, 0, 1, ['HOST_PORT'],
-            'Target Must Have 1 Source',
-            'Target Must Connect From Source'));
+        // this.multiplicities.push(new mxMultiplicity(
+        //     true, 'host_port', null, null, 0, 1, ['vm_port'],
+        //     'Target Must Have 1 Source',
+        //     'Target Must Connect From Source'));
+        // this.multiplicities.push(new mxMultiplicity(
+        //     true, 'vm_port', null, null, 0, 1, ['host_port'],
+        //     'Target Must Have 1 Source',
+        //     'Target Must Connect From Source'));
+    }
 
-        // this.connectionHandler = new VnfTopologyConnectionHandler(this);
-        // this.connectionHandler.validateConnection = (source: any, target: any) => {
-        //   console.log(source);
-        //   console.log(target);
-        //   // mxUtils.error('Browser is not supported!', 200, false);
-        //   return 'sadsadsa';
-        // };
+    getEdgeValidationError(edge: any, source: mxgraph.mxCell, target: mxgraph.mxCell): string {
+        const result: string = super.getEdgeValidationError(edge, source, target);
+        if (result === null) { // No errors
+            // Invalid connect between VNFs from different Hosts
+            if (mxUtils.isNode(source.value, 'VM_PORT') && mxUtils.isNode(target.value, 'VM_PORT')) {
+                const sourceHost: mxgraph.mxCell = source.getParent().getParent();
+                const targetHost: mxgraph.mxCell = target.getParent().getParent();
+                if (sourceHost !== targetHost) {
+                    return 'Invalid connect between VNFs from different Hosts';
+                }
+            }
+
+            // Validate connection between host ports must contain only one connection
+            if (mxUtils.isNode(source.value, 'HOST_PORT') && mxUtils.isNode(target.value, 'HOST_PORT')) {
+                const sourceHost: mxgraph.mxCell = source.getParent();
+                const targetHost: mxgraph.mxCell = target.getParent();
+                if (sourceHost.edges) {
+                    const edgesWithSameSourceTarget = sourceHost.edges.find(edgeIter => {
+                        // source.getParent().edges[0].style => "sourcePort=7;targetPort=10;"
+                        const edgeSource: mxgraph.mxCell = this.getModel().getCell(edgeIter.style.split(';')[0].split('=')[1]);
+                        const edgeTarget: mxgraph.mxCell = this.getModel().getCell(edgeIter.style.split(';')[1].split('=')[1]);
+                        // const edgeSource: mxgraph.mxCell = edgeIter.source;
+                        // const edgeTarget: mxgraph.mxCell = edgeIter.target;
+
+                        return (mxUtils.isNode(edgeSource.value, 'HOST_PORT') && mxUtils.isNode(edgeTarget.value, 'HOST_PORT')) &&
+                            (edgeSource === source || edgeTarget === source || edgeSource === target || edgeTarget === target);
+                    });
+                    if (edgesWithSameSourceTarget) {
+                        return 'Invalid connect between host ports must contain only one connection';
+                    }
+                }
+                if (targetHost.edges) {
+                    const edgesWithSameSourceTarget = targetHost.edges.find(edgeIter => {
+                        // source.getParent().edges[0].style => "sourcePort=7;targetPort=10;"
+                        const edgeSource: mxgraph.mxCell = this.getModel().getCell(edgeIter.style.split(';')[0].split('=')[1]);
+                        const edgeTarget: mxgraph.mxCell = this.getModel().getCell(edgeIter.style.split(';')[1].split('=')[1]);
+                        // const edgeSource: mxgraph.mxCell = edgeIter.source;
+                        // const edgeTarget: mxgraph.mxCell = edgeIter.target;
+
+                        return (mxUtils.isNode(edgeSource.value, 'HOST_PORT') && mxUtils.isNode(edgeTarget.value, 'HOST_PORT')) &&
+                            (edgeSource === source || edgeTarget === source || edgeSource === target || edgeTarget === target);
+                    });
+                    if (edgesWithSameSourceTarget) {
+                        return 'Invalid connect between host ports must contain only one connection';
+                    }
+                }
+            }
+
+            // Validate VM port only with one connection on same host
+            if (mxUtils.isNode(source.value, 'HOST_PORT') && mxUtils.isNode(target.value, 'VM_PORT')) {
+                const sourceHost: mxgraph.mxCell = source.getParent();
+                const targetHost: mxgraph.mxCell = target.getParent().getParent();
+                if (sourceHost !== targetHost) {
+                    return 'Invalid connect VNF port to Host port in different host';
+                }
+            }
+
+            if (mxUtils.isNode(source.value, 'VM_PORT') && mxUtils.isNode(target.value, 'HOST_PORT')) {
+                const sourceHost: mxgraph.mxCell = source.getParent().getParent();
+                const targetHost: mxgraph.mxCell = target.getParent();
+                if (sourceHost !== targetHost) {
+                    return 'Invalid connect VNF port to Host port in different host';
+                }
+            }
+
+            // Validate VM port only with one connection on same host
+            if (mxUtils.isNode(source.value, 'VM_PORT') || mxUtils.isNode(target.value, 'VM_PORT')) {
+                const sourceHost: mxgraph.mxCell = source.getParent();
+                const targetHost: mxgraph.mxCell = target.getParent();
+
+                if (sourceHost.edges) {
+                    const edgesWithSameSourceTarget = sourceHost.edges.find(edgeIter => {
+                        // source.getParent().edges[0].style => "sourcePort=7;targetPort=10;"
+                        const edgeSource: mxgraph.mxCell = this.getModel().getCell(edgeIter.style.split(';')[0].split('=')[1]);
+                        const edgeTarget: mxgraph.mxCell = this.getModel().getCell(edgeIter.style.split(';')[1].split('=')[1]);
+                        // const edgeSource: mxgraph.mxCell = edgeIter.source;
+                        // const edgeTarget: mxgraph.mxCell = edgeIter.target;
+
+                        return (mxUtils.isNode(edgeSource.value, 'VM_PORT') || mxUtils.isNode(edgeTarget.value, 'VM_PORT')) &&
+                            (edgeSource === source || edgeTarget === source || edgeSource === target || edgeTarget === target);
+                    });
+                    if (edgesWithSameSourceTarget) {
+                        return 'Invalid connect VNF port must contain only one connection';
+                    }
+                }
+                if (targetHost.edges) {
+                    const edgesWithSameSourceTarget = targetHost.edges.find(edgeIter => {
+                        // source.getParent().edges[0].style => "sourcePort=7;targetPort=10;"
+                        const edgeSource: mxgraph.mxCell = this.getModel().getCell(edgeIter.style.split(';')[0].split('=')[1]);
+                        const edgeTarget: mxgraph.mxCell = this.getModel().getCell(edgeIter.style.split(';')[1].split('=')[1]);
+                        // const edgeSource: mxgraph.mxCell = edgeIter.source;
+                        // const edgeTarget: mxgraph.mxCell = edgeIter.target;
+
+                        return (mxUtils.isNode(edgeSource.value, 'VM_PORT') || mxUtils.isNode(edgeTarget.value, 'VM_PORT')) &&
+                            (edgeSource === source || edgeTarget === source || edgeSource === target || edgeTarget === target);
+                    });
+                    if (edgesWithSameSourceTarget) {
+                        return 'Invalid connect VNF port must contain only one connection';
+                    }
+                }
+            }
+            // Validate already exist connection
+            console.log(result);
+        } else if (result === '') { // No connectable
+
+        }
+        return result;
     }
 
     isValidDropTarget(cell: any, cells: any, evt: any): boolean {
